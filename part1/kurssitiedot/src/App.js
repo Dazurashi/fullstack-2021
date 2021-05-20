@@ -11,15 +11,9 @@ const Header = (props) =>{
 const Content = (props) =>{
   return(
     <>
-      <p>
-        {props.part1} {props.ex1}
-      </p>
-      <p>
-        {props.part2} {props.ex2}
-      </p>
-      <p>
-        {props.part3} {props.ex3}
-      </p>
+      <Part part={props.part1} ex={props.ex1} />
+      <Part part={props.part2} ex={props.ex2} />
+      <Part part={props.part3} ex={props.ex3} />
     </>
   )
 }
@@ -28,6 +22,14 @@ const Total = (props) =>{
   return(
     <>
       <p>Number of exercises {props.total}</p>
+    </>
+  )
+}
+
+const Part = (props) =>{
+  return(
+    <>
+      <p>{props.part} {props.ex}</p>
     </>
   )
 }
