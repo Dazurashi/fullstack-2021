@@ -31,10 +31,10 @@ const Course = (props) => {
   }
   
   const Total = (props) =>{
-    const parts = props.course.parts.map(course => course.exercises)
+    const ex = props.course.parts.map(course => course.exercises)
     return (
             <>
-                total of {parts.reduce((s, p) => s + p)} exercises 
+                total of {ex.reduce((s, p) => s + p)} exercises 
             </>
     )
   }
