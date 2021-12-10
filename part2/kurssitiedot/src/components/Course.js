@@ -1,5 +1,5 @@
 import React from 'react'
-
+//TODO laita nää eri komponentteihin
 const Course = (props) => {
     console.log(props)
 
