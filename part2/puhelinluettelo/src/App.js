@@ -1,61 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import personService from "./services/persons"
-
-//TODO laita komponentit kansioihin ja tee index.css kuten tehtävässä pyydetään. Siisti myös koodia
-
-const Filter = ({newFind, handleFindChange}) => {
-  return <div>
-    filter shown with <input value={newFind} onChange={handleFindChange} />
-  </div>
-}
-
-const PersonForm = ({newName, newNum, handlePersonChange, handleNumChange, addPerson}) => {
-  return <form onSubmit={addPerson}>
-    <div>
-      name: <input value={newName} onChange={handlePersonChange}/>
-    </div>
-    <div>
-      number: <input value={newNum} onChange={handleNumChange}/>
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-  </form>
-}
-
-const Persons = ({persons, newFind, handleDeletePerson}) => {
-
-  return (
-    <ul>
-      {persons.filter(person => person.name.toUpperCase().includes(newFind.toUpperCase())).map(person => (
-        <UniquePerson key={person.id} name={person.name} num={person.number} deletePerson={handleDeletePerson(person.name, person.id)}/> 
-      ))}
-    </ul>
-  )
-}
-
-const Notification = ({msg}) => {
-  if (msg === null){
-      return null
-  }
-  return (
-      <div className="error"> {msg}</div>
-  )
-}
-
-const UniquePerson = ({name, num, deletePerson}) =>{
-  return (
-<li>{name} {num} <button onClick={deletePerson}> delete</button></li>
-  )
-}
+import Notification from "./components/Notification"
+import PersonForm from "./components/PersonForm"
+import Persons from "./components/Persons"
+import Filter from "./components/Filter"
 
 const App = () => {
-  // const [ persons, setPersons] = useState([
-  //   { name: 'Arto Hellas', number: '040-123456'},
-  //   { name: 'Ada Lovelace', number: '39-44-5323523' },
-  //   { name: 'Dan Abramov', number: '12-43-234345' },
-  //   { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  // ]) 
+
   const [ persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [newNum, setNewNum] = useState("")
@@ -80,11 +31,12 @@ const App = () => {
         personService.update(oldPerson.id, {...oldPerson, number: newNum}).then(newPerson => {
           setPersons(persons.map(person => (person.name === newName ? newPerson : person)))
         }).catch(error => {
-          setNotification(`Information of ${personObject.name} has already been removed from server`)
+          setNotification({notification: `Information of ${personObject.name} has already been removed from server`, type: "error"})
           console.log("Failed to update")
         })
         setPersons(persons.concat(personObject))
-        setNotification(`Number of ${personObject.name} has been updated`)
+        setNotification({notification: `Number of ${personObject.name} has been updated`, type: "success"})
+        console.log("Number updated")
         setNewName("")
         setNewNum("")
         setTimeout(() => {
@@ -95,7 +47,8 @@ const App = () => {
     else{
       personService.addPerson(personObject).then(person => {
         setPersons(persons.concat(person))
-        setNotification(`Added ${personObject.name}`)
+        setNotification({notification: `Added ${personObject.name}`, type: "success"})
+        console.log("Added new")
         setNewName("")
         setNewNum("")
       }).catch(error => {
@@ -109,7 +62,6 @@ const App = () => {
   }
 
   const handlePersonChange = (event) => {
-    //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
@@ -126,10 +78,12 @@ const App = () => {
       if (window.confirm(`Delete ${name} ?`)) {
         personService.deletePerson(id).then(() => {
           setPersons(persons.filter(person => person.id !== id))
-          setNotification(`Deleted ${name}`)
+          setNotification({notification: `Deleted ${name}`, type: "success"})
+          console.log("Deleted someone")
         }).catch(error => {
           setPersons(persons.filter(person => person.id !== name))
-          setNotification(`Person named ${name} has already been deleted`)
+          setNotification({notification: `Person named ${name} has already been deleted`, type: "error"})
+          console.log("Name already deleted")
         })
         setTimeout(() => {
           setNotification(null)
