@@ -119,3 +119,19 @@ describe('favorite blog', () => {
           })
     })
 })
+
+//4.6
+describe('most blogs by author', () => {
+    test('no blogs', () => {
+        const result = listHelper.mostBlogs(listWithZeroBlogs)
+        expect(result).toEqual(null)
+    })
+    test('only one blog', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+        expect(result).toEqual({author: 'Edsger W. Dijkstra', blogs: 1})
+    })
+    test('author with most blogs', () => {
+        const result = listHelper.mostBlogs(listWithManyBlogs)
+        expect(result).toEqual({author: 'Robert C. Martin', blogs: 3})
+    })
+})
