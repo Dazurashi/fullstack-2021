@@ -36,9 +36,34 @@ const mostBlogs = (blogs) => {
     return {author: highestCount[0].author, blogs: highestCount[0].blogs.length}
 }
 
+const mostLikes = (blogs) => {
+    if (blogs.length === 0) {
+        return null
+    }
+
+    const group = _.groupBy(blogs, 'author')
+    const highestCount = Object.keys(group).map(author => {
+        return {author, likes: likes(group[author])}
+    }).sort((a, b) => {
+        //console.log("FIRST")
+        return b.likes - a.likes
+    })
+    //console.log(highestCount[0])
+    return {author: highestCount[0].author, likes: highestCount[0].likes}
+}
+
+const likes = (blogs) => {
+    //console.log("HERE")
+    const reducer = (sum, item) => {
+        return sum + item.likes
+    }
+    return blogs.length === 0 ? 0 : blogs.reduce(reducer, 0)
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
