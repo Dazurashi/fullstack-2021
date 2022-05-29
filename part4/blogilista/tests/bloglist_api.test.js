@@ -32,6 +32,24 @@ test('identifying field is written id', async () => {
     expect(response.body[0].id).toBeDefined()
 })
 
+test('adding new blog', async () => {
+    const newBlog= {
+        title: 'How to pass bot tests',
+        author: 'First robot author ever',
+        url: 'www.fakewebsite.com'
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+    const contents = blogsAtEnd.map(blog => blog.title)
+    expect(contents).toContain('How to pass bot tests')
+})
 
   
 
