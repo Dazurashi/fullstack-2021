@@ -27,6 +27,11 @@ test('all blogs are returned', async () => {
     expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
+test('identifying field is written id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+})
+
 
   
 
