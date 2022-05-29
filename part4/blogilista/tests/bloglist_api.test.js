@@ -51,6 +51,23 @@ test('adding new blog', async () => {
     expect(contents).toContain('How to pass bot tests')
 })
 
+test('sure that likes-field has at least value 0', async() => {
+    const newBlog= {
+        title: 'How to pass bot tests',
+        author: 'First robot author ever',
+        url: 'www.fakewebsite.com'
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0)
+})
+
   
 
 afterAll(() => {
