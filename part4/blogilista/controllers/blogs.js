@@ -9,13 +9,21 @@ blogsRouter.get('/', async (request, response) => {
 
 
 blogsRouter.post('/', async (request, response) => {
+    if (!request.body.hasOwnProperty('title')) {
+        return response.status(400).json({error: 'no title'})
+    }
+    if (!request.body.hasOwnProperty('url')) {
+        return response.status(400).json({error: 'no url'})
+    }
     const body = request.body
+    
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
         likes: body.likes
     })
+
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog)
 })

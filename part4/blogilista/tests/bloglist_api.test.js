@@ -7,13 +7,8 @@ const Blog = require('../models/blog')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-  
-    let blogObject = new Blog(helper.initialBlogs[0])
-    await blogObject.save()
-  
-    blogObject = new Blog(helper.initialBlogs[1])
-    await blogObject.save()
-})
+    await Blog.insertMany(helper.initialBlogs)
+  })
 
 test('blogs are returned as json', async () => {
     await api
@@ -66,6 +61,19 @@ test('sure that likes-field has at least value 0', async() => {
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
     expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0)
+})
+
+test('400 if no title or url', async () => {
+    const newBlog = {likes: 7}
+    console.log(newBlog)
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        
+        
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
   
