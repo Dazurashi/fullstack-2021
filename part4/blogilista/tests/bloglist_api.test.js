@@ -88,23 +88,7 @@ test('deleting blog gives status code 204', async () => {
 
     const contents = blogsAtEnd.map(blog => blog.title)
     expect(contents).not.toContain(blogToDelete.title)
-})
-
-// test('updating likes of blog give 200', async () =>{
-//     const blogsAtStart = await helper.blogsInDb()
-//     const blogToUpdate = blogsAtStart[0]
-//     console.log(blogsAtStart[0])
-//     await api
-//         .put(`/api/blogs${blogToUpdate.id}`)
-//         .send({likes: 8})
-//         .expect(200)
-    
-//     const blogsAtEnd = await helper.blogsInDb()
-//     const updated = blogsAtEnd[0]
-//     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-//     expect(updated.likes).toBe(8)
-// })
-  
+})  
 
 test('can update a blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
